@@ -133,12 +133,12 @@ bool IsAllAgainstAllMode (void* instance,void* Gamemode) {
 */
 
 
-class aimbotBruh {
+class AimbotBruh {
 private:
     std::vector<enemy_player *> *enemies;
 
 public:
-    aimbotBruh(){
+    AimbotBruh(){
         enemies = new std::vector<enemy_player *>();
 
 
@@ -187,7 +187,7 @@ public:
 
     void removeAllEnemies(){
         for(int i = 0; i<enemies->size(); i++){
-                enemies->erase(enemies->begin() + i);
+            enemies->erase(enemies->begin() + i);
 
         }
     }
@@ -209,11 +209,11 @@ public:
         newEnemy->team = get_Team(enemyObject);
 
 
-      if(!isFFA) {
-          if(newEnemy->team == me->team) {
-              return;
-          }
-      }
+        if(!isFFA) {
+            if(newEnemy->team == me->team) {
+                return;
+            }
+        }
 
 
         enemies->push_back(newEnemy);
@@ -221,7 +221,7 @@ public:
 
 
 
-    
+
     void updateEnemies(void *enemyObject){
         for(int i=0; i<enemies->size(); i++){
             enemy_player *current = (*enemies)[i];
@@ -246,8 +246,8 @@ public:
            }
 */
             if(current->object == enemyObject){
-                    current->location = GetCharacterLocation(enemyObject);
-                    current->team = get_Team(enemyObject);
+                current->location = GetCharacterLocation(enemyObject);
+                current->team = get_Team(enemyObject);
 
             }
         }
@@ -287,7 +287,7 @@ public:
     }
 };
 
-aimbotBruh *aimbotBruh;
+AimbotBruh *aimbotBruh;
 
 
 
@@ -299,7 +299,7 @@ void sceneUpdate (void *instance) {
     if(instance != NULL) {
         bool ismenu = IsCurrentSceneIsMenu(instance);
         if(ismenu) {
-          aimbotBruh->removeAllEnemies();
+            aimbotBruh->removeAllEnemies();
         }
     }
     old_sceneUpdate(instance);
@@ -320,7 +320,7 @@ bool (*get_isLocalPlayer)(void * instance);
 void (*old_UpdateController)(void* Player);
 void UpdateController(void * Player) {
     if(Player != NULL && OptionsManagerClass != NULL) {
-       set_Fov(OptionsManagerClass,FovValue);
+        set_Fov(OptionsManagerClass,FovValue);
     }
 
     if(Player != NULL) {
@@ -351,13 +351,13 @@ void UpdateZoom (void* instance) {
 void (*old_UpdateEnemiesController)(void* Player);
 void UpdateEnemiesController(void * Player) {
 
-        if(Player != NULL) {
+    if(Player != NULL) {
 
 
-            aimbotBruh->tryAddEnemy(Player);
-            aimbotBruh->updateEnemies(Player);
+        aimbotBruh->tryAddEnemy(Player);
+        aimbotBruh->updateEnemies(Player);
 
-        }
+    }
     return old_UpdateEnemiesController(Player);
 }
 
@@ -371,39 +371,39 @@ void (*old_LookControllerUpdate)(void* CameraController );
 bool Aimbot;
 void LookControllerUpdate(void * CameraController) {
 
-        if(CameraController != NULL) {
+    if(CameraController != NULL) {
 
-            if(isZoomed && Aimbot) {
-                Vector3 angles;
-                enemy_player *target = aimbotBruh->getClosestEnemy(me->location);
-                if(target != NULL) {
-                  
-                    angles = ToEulerRad(GetRotationToLocation(target->location, -0.2f));
+        if(isZoomed && Aimbot) {
+            Vector3 angles;
+            enemy_player *target = aimbotBruh->getClosestEnemy(me->location);
+            if(target != NULL) {
 
-
-
-                  
-                    if (angles.X >= 275.0f)
-                        angles.X -= 360.0f;
-                    if (angles.X <= -275.0f)
-                        angles.X += 360.0f;
-
-                    if (angles.Y >= 275.0f)
-                        angles.Y -= 360.0f;
-                    if (angles.Y <= -275.0f)
-                        angles.Y += 360.0f;
+                angles = ToEulerRad(GetRotationToLocation(target->location, -0.2f));
 
 
-                    SetX(CameraController, angles.Y);
-                    SetY(CameraController, angles.X);
-                }
 
+
+                if (angles.X >= 275.0f)
+                    angles.X -= 360.0f;
+                if (angles.X <= -275.0f)
+                    angles.X += 360.0f;
+
+                if (angles.Y >= 275.0f)
+                    angles.Y -= 360.0f;
+                if (angles.Y <= -275.0f)
+                    angles.Y += 360.0f;
+
+
+                SetX(CameraController, angles.Y);
+                SetY(CameraController, angles.X);
             }
 
-
-
-
         }
+
+
+
+
+    }
 
     return old_LookControllerUpdate(CameraController);
 }
@@ -432,7 +432,7 @@ void *hack_thread(void *) {
     LOGI(OBFUSCATE("%s has been loaded"), (const char *) targetLibName);
 
 #if defined(__aarch64__)
-    aimbotBruh = new aimbotBruh();
+    aimbotBruh = new AimbotBruh();
     me = new me_player();
     A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0xCFAE18),  (void*)isFreeForAll, (void**)&old_isFreeForAll);
     get_Team = (short (*)(void *))getAbsoluteAddress(targetLibName,0x9586A0);
@@ -455,54 +455,54 @@ void *hack_thread(void *) {
 
 
     String_CreateString = (monoString*(*)(void *,const char *))getAbsoluteAddress(targetLibName, 0x173B89C);
-   get_StringInstance  = (void (*))getAbsoluteAddress(targetLibName,0x173B89C);
+    get_StringInstance  = (void (*))getAbsoluteAddress(targetLibName,0x173B89C);
 
 
- /*
-     hexPatches.FreeCraft = MemoryPatch::createWithHex(targetLibName,
-                                                    string2Offset(OBFUSCATE("0x9FE384")),
-                                                    OBFUSCATE("20 00 80 D2 C0 03 5F D6"));
-      hexPatches.FreeLearn = MemoryPatch::createWithHex(targetLibName,
-                                                    string2Offset(OBFUSCATE("0x9FE258")),
-                                                    OBFUSCATE("20 00 80 D2 C0 03 5F D6"));
+    /*
+        hexPatches.FreeCraft = MemoryPatch::createWithHex(targetLibName,
+                                                       string2Offset(OBFUSCATE("0x9FE384")),
+                                                       OBFUSCATE("20 00 80 D2 C0 03 5F D6"));
+         hexPatches.FreeLearn = MemoryPatch::createWithHex(targetLibName,
+                                                       string2Offset(OBFUSCATE("0x9FE258")),
+                                                       OBFUSCATE("20 00 80 D2 C0 03 5F D6"));
 
-      hexPatches.UnlockCraft = MemoryPatch::createWithHex(targetLibName,
-                                                    string2Offset(OBFUSCATE("0x9FE1C4")),
-                                                    OBFUSCATE("00 00 80 D2 C0 03 5F D6"));
-      hexPatches.IsKnown = MemoryPatch::createWithHex(targetLibName,
-                                                    string2Offset(OBFUSCATE("0x9FE178")),
-                                                    OBFUSCATE("20 00 80 D2 C0 03 5F D6"));
-      hexPatches.Level = MemoryPatch::createWithHex(targetLibName,
-                                                    string2Offset(OBFUSCATE("0x9FE0D0")),
-                                                    OBFUSCATE("00 00 80 D2 C0 03 5F D6"));
-      hexPatches.InfItems = MemoryPatch::createWithHex(targetLibName,
-                                                    string2Offset(OBFUSCATE("0xA7F498")),
-                                                    OBFUSCATE("80 02 80 D2 C0 03 5F D6"));
-       hexPatches.FreeBuild = MemoryPatch::createWithHex(targetLibName,
-                                                    string2Offset(OBFUSCATE("0xB423B8")),
-                                                    OBFUSCATE("20 00 80 D2 C0 03 5F D6"));
+         hexPatches.UnlockCraft = MemoryPatch::createWithHex(targetLibName,
+                                                       string2Offset(OBFUSCATE("0x9FE1C4")),
+                                                       OBFUSCATE("00 00 80 D2 C0 03 5F D6"));
+         hexPatches.IsKnown = MemoryPatch::createWithHex(targetLibName,
+                                                       string2Offset(OBFUSCATE("0x9FE178")),
+                                                       OBFUSCATE("20 00 80 D2 C0 03 5F D6"));
+         hexPatches.Level = MemoryPatch::createWithHex(targetLibName,
+                                                       string2Offset(OBFUSCATE("0x9FE0D0")),
+                                                       OBFUSCATE("00 00 80 D2 C0 03 5F D6"));
+         hexPatches.InfItems = MemoryPatch::createWithHex(targetLibName,
+                                                       string2Offset(OBFUSCATE("0xA7F498")),
+                                                       OBFUSCATE("80 02 80 D2 C0 03 5F D6"));
+          hexPatches.FreeBuild = MemoryPatch::createWithHex(targetLibName,
+                                                       string2Offset(OBFUSCATE("0xB423B8")),
+                                                       OBFUSCATE("20 00 80 D2 C0 03 5F D6"));
 
-       hexPatches.CanComplete = MemoryPatch::createWithHex(targetLibName,
-                                                    string2Offset(OBFUSCATE("0x1ADA780")),
-                                                    OBFUSCATE("20 00 80 D2 C0 03 5F D6"));
-       hexPatches.Durability = MemoryPatch::createWithHex(targetLibName,
-                                                    string2Offset(OBFUSCATE("0x8AAB04")),
-                                                    OBFUSCATE("C0 03 5F D6"));
-        hexPatches.FastLoot = MemoryPatch::createWithHex(targetLibName,
-                                                    string2Offset(OBFUSCATE("0xAAE62C")),
-                                                    OBFUSCATE("00 00 80 D2 C0 03 5F D6"));
-         hexPatches.ChestKey = MemoryPatch::createWithHex(targetLibName,
-                                                    string2Offset(OBFUSCATE("0xAAE660")),
-                                                    OBFUSCATE("00 00 80 D2 C0 03 5F D6"));
-         hexPatches.ChestLocked = MemoryPatch::createWithHex(targetLibName,
-                                                    string2Offset(OBFUSCATE("0xAAE58C")),
-                                                    OBFUSCATE("20 00 80 D2 C0 03 5F D6"));
-        hexPatches.ShowEvents = MemoryPatch::createWithHex(targetLibName,
-                                                    string2Offset(OBFUSCATE("0x19E818C")),
-                                                    OBFUSCATE("20 00 80 D2 C0 03 5F D6"));
-                                                    */
+          hexPatches.CanComplete = MemoryPatch::createWithHex(targetLibName,
+                                                       string2Offset(OBFUSCATE("0x1ADA780")),
+                                                       OBFUSCATE("20 00 80 D2 C0 03 5F D6"));
+          hexPatches.Durability = MemoryPatch::createWithHex(targetLibName,
+                                                       string2Offset(OBFUSCATE("0x8AAB04")),
+                                                       OBFUSCATE("C0 03 5F D6"));
+           hexPatches.FastLoot = MemoryPatch::createWithHex(targetLibName,
+                                                       string2Offset(OBFUSCATE("0xAAE62C")),
+                                                       OBFUSCATE("00 00 80 D2 C0 03 5F D6"));
+            hexPatches.ChestKey = MemoryPatch::createWithHex(targetLibName,
+                                                       string2Offset(OBFUSCATE("0xAAE660")),
+                                                       OBFUSCATE("00 00 80 D2 C0 03 5F D6"));
+            hexPatches.ChestLocked = MemoryPatch::createWithHex(targetLibName,
+                                                       string2Offset(OBFUSCATE("0xAAE58C")),
+                                                       OBFUSCATE("20 00 80 D2 C0 03 5F D6"));
+           hexPatches.ShowEvents = MemoryPatch::createWithHex(targetLibName,
+                                                       string2Offset(OBFUSCATE("0x19E818C")),
+                                                       OBFUSCATE("20 00 80 D2 C0 03 5F D6"));
+                                                       */
 #else
-  //armv7
+    //armv7
 #endif
 
     // Anti Leech
@@ -555,8 +555,8 @@ jobjectArray getFeatureList(JNIEnv *env, jobject context) {
 }
 
 void Changes(JNIEnv *env, jclass clazz, jobject obj,
-                                        jint featNum, jstring featName, jint value,
-                                        jboolean boolean, jstring str) {
+             jint featNum, jstring featName, jint value,
+             jboolean boolean, jstring str) {
 
     LOGD(OBFUSCATE("Feature name: %d - %s | Value: = %d | Bool: = %d | Text: = %s"), featNum,
          env->GetStringUTFChars(featName, 0), value,
@@ -573,7 +573,7 @@ void Changes(JNIEnv *env, jclass clazz, jobject obj,
 
         case 1:
 
-          Aimbot = boolean;
+            Aimbot = boolean;
 
             break;
 
@@ -610,13 +610,13 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
     jclass c = globalEnv->FindClass("com/android/support/Menu");
     if (c != nullptr){
         static const JNINativeMethod menuMethods[] = {
-              {OBFUSCATE("Icon"), OBFUSCATE("()Ljava/lang/String;"), reinterpret_cast<void *>(Icon)},
-              {OBFUSCATE("IconWebViewData"),  OBFUSCATE("()Ljava/lang/String;"), reinterpret_cast<void *>(IconWebViewData)},
-              {OBFUSCATE("isGameLibLoaded"),  OBFUSCATE("()Z"), reinterpret_cast<void *>(isGameLibLoaded)},
-              {OBFUSCATE("setHeadingText"),  OBFUSCATE("(Landroid/widget/TextView;)V"), reinterpret_cast<void *>(setHeadingText)},
-              {OBFUSCATE("setTitleText"),  OBFUSCATE("(Landroid/widget/TextView;)V"), reinterpret_cast<void *>(setTitleText)},
-              {OBFUSCATE("settingsList"),  OBFUSCATE("()[Ljava/lang/String;"), reinterpret_cast<void *>(settingsList)},
-              {OBFUSCATE("getFeatureList"),  OBFUSCATE("()[Ljava/lang/String;"), reinterpret_cast<void *>(getFeatureList)},
+                {OBFUSCATE("Icon"), OBFUSCATE("()Ljava/lang/String;"), reinterpret_cast<void *>(Icon)},
+                {OBFUSCATE("IconWebViewData"),  OBFUSCATE("()Ljava/lang/String;"), reinterpret_cast<void *>(IconWebViewData)},
+                {OBFUSCATE("isGameLibLoaded"),  OBFUSCATE("()Z"), reinterpret_cast<void *>(isGameLibLoaded)},
+                {OBFUSCATE("setHeadingText"),  OBFUSCATE("(Landroid/widget/TextView;)V"), reinterpret_cast<void *>(setHeadingText)},
+                {OBFUSCATE("setTitleText"),  OBFUSCATE("(Landroid/widget/TextView;)V"), reinterpret_cast<void *>(setTitleText)},
+                {OBFUSCATE("settingsList"),  OBFUSCATE("()[Ljava/lang/String;"), reinterpret_cast<void *>(settingsList)},
+                {OBFUSCATE("getFeatureList"),  OBFUSCATE("()[Ljava/lang/String;"), reinterpret_cast<void *>(getFeatureList)},
         };
 
         int mm = globalEnv->RegisterNatives(c, menuMethods, sizeof(menuMethods) / sizeof(JNINativeMethod));
