@@ -360,16 +360,33 @@ void UpdateEnemiesController(void * Player) {
     }
     return old_UpdateEnemiesController(Player);
 }
+bool RecoilBool;
+void (*CalcHeightByTime_old)(void * instance);
+void CalcHeightByTime(void * instance) {
 
+    if(instance != NULL && RecoilBool)  {
+       return;
+    }
+     CalcHeightByTime_old(instance);
+}
+
+void (*CalcHeightByTime_old2)(void * instance);
+void CalcHeightByTime2(void * instance) {
+
+    if(instance != NULL && RecoilBool)  {
+        return;
+    }
+    CalcHeightByTime_old2(instance);
+}
 
 
 
 void (*SetX) (void* Player,float Xrot);
 void (*SetY) (void* Player,float Yrot);
-void (*old_LookControllerUpdate)(void* CameraController );
+void (*old_LookControllerUpdate)(void* CameraController ,bool isblocked);
 
 bool Aimbot;
-void LookControllerUpdate(void * CameraController) {
+void LookControllerUpdate(void * CameraController,bool isblocked) {
 
     if(CameraController != NULL) {
 
@@ -378,7 +395,7 @@ void LookControllerUpdate(void * CameraController) {
             enemy_player *target = aimbotBruh->getClosestEnemy(me->location);
             if(target != NULL) {
 
-                angles = ToEulerRad(GetRotationToLocation(target->location, -0.2f));
+                angles = ToEulerRad(GetRotationToLocation(target->location, -0.35f));
 
 
 
@@ -405,7 +422,7 @@ void LookControllerUpdate(void * CameraController) {
 
     }
 
-    return old_LookControllerUpdate(CameraController);
+    return old_LookControllerUpdate(CameraController,isblocked);
 }
 
 monoString *(*String_CreateString)(void *_this, const char *str);
@@ -442,6 +459,8 @@ void *hack_thread(void *) {
     A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0xCC0EC4),  (void*)UpdateZoom, (void**)&old_UpdateZoom);
     A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0x9D55BC),  (void*)sceneUpdate, (void**)&old_sceneUpdate);
     A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0xBDBEE0),  (void*)UpdateEnemiesController, (void**)&old_UpdateEnemiesController);
+    A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0xCBE210),  (void*)CalcHeightByTime, (void**)&CalcHeightByTime_old);
+    A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0x1AC256C),  (void*)CalcHeightByTime2, (void**)&CalcHeightByTime_old2);
 
     get_isLocalPlayer =  (bool (*)(void *))getAbsoluteAddress(targetLibName,0xDC7818);
     SetX  = (void (*)(void *,float))getAbsoluteAddress(targetLibName,0xAFE2B0);
@@ -451,7 +470,7 @@ void *hack_thread(void *) {
     A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0xDC9224),  (void*)UpdateController, (void**)&old_UpdateController);
 
 
-    A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0xAFF76C),  (void*)LookControllerUpdate, (void**)&old_LookControllerUpdate);
+    A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0xAFF3A0),  (void*)LookControllerUpdate, (void**)&old_LookControllerUpdate);
 
 
     String_CreateString = (monoString*(*)(void *,const char *))getAbsoluteAddress(targetLibName, 0x173B89C);
@@ -533,7 +552,8 @@ jobjectArray getFeatureList(JNIEnv *env, jobject context) {
     const char *features[] = {
             OBFUSCATE("Category_ Cheats"), //Not counted
             OBFUSCATE("SeekBar_FOV_60_120"),
-            OBFUSCATE("Toggle_ AimBot")
+            OBFUSCATE("Toggle_ AimBot"),
+            OBFUSCATE("Toggle_ Recoil")
 
 
 
@@ -574,6 +594,11 @@ void Changes(JNIEnv *env, jclass clazz, jobject obj,
         case 1:
 
             Aimbot = boolean;
+
+            break;
+        case 2:
+
+            RecoilBool = boolean;
 
             break;
 
