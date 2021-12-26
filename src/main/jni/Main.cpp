@@ -395,7 +395,7 @@ void LookControllerUpdate(void * CameraController,bool isblocked) {
             enemy_player *target = aimbotBruh->getClosestEnemy(me->location);
             if(target != NULL) {
 
-                angles = ToEulerRad(GetRotationToLocation(target->location, -0.35f));
+                angles = ToEulerRad(GetRotationToLocation(target->location, -0.2f));
 
 
 
@@ -451,30 +451,30 @@ void *hack_thread(void *) {
 #if defined(__aarch64__)
     aimbotBruh = new AimbotBruh();
     me = new me_player();
-    A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0xCFAE18),  (void*)isFreeForAll, (void**)&old_isFreeForAll);
-    get_Team = (short (*)(void *))getAbsoluteAddress(targetLibName,0x9586A0);
-    OptionsManagerClass = (void (*))getAbsoluteAddress(targetLibName,0x9E42FC);
-    set_Fov  = (void (*)(void *,float))getAbsoluteAddress(targetLibName,0x9E42FC);
-    IsCurrentSceneIsMenu =  (bool (*)(void *))getAbsoluteAddress(targetLibName,0x9D6308);
-    A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0xCC0EC4),  (void*)UpdateZoom, (void**)&old_UpdateZoom);
-    A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0x9D55BC),  (void*)sceneUpdate, (void**)&old_sceneUpdate);
-    A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0xBDBEE0),  (void*)UpdateEnemiesController, (void**)&old_UpdateEnemiesController);
-    A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0xCBE210),  (void*)CalcHeightByTime, (void**)&CalcHeightByTime_old);
-    A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0x1AC256C),  (void*)CalcHeightByTime2, (void**)&CalcHeightByTime_old2);
+    A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0x16A6828),  (void*)isFreeForAll, (void**)&old_isFreeForAll);
+    get_Team = (short (*)(void *))getAbsoluteAddress(targetLibName,0x13041E8);
+    OptionsManagerClass = (void (*))getAbsoluteAddress(targetLibName,0x138EB90);
+    set_Fov  = (void (*)(void *,float))getAbsoluteAddress(targetLibName,0x138EB90);
+    IsCurrentSceneIsMenu =  (bool (*)(void *))getAbsoluteAddress(targetLibName,0x1380B9C);
+    A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0x166B8D4),  (void*)UpdateZoom, (void**)&old_UpdateZoom);
+    A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0x137FE50),  (void*)sceneUpdate, (void**)&old_sceneUpdate);
+    A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0x1585774),  (void*)UpdateEnemiesController, (void**)&old_UpdateEnemiesController);
+    A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0x1668C20),  (void*)CalcHeightByTime, (void**)&CalcHeightByTime_old);
+    A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0x17C83EC),  (void*)CalcHeightByTime2, (void**)&CalcHeightByTime_old2);
 
-    get_isLocalPlayer =  (bool (*)(void *))getAbsoluteAddress(targetLibName,0xDC7818);
-    SetX  = (void (*)(void *,float))getAbsoluteAddress(targetLibName,0xAFE2B0);
-    SetY  = (void (*)(void *,float))getAbsoluteAddress(targetLibName,0xAFE2C0);
-    get_transform = (void *(*)(void *))getAbsoluteAddress(targetLibName,0x1296B48);
-    get_position_Injected = (void (*)(void *, Vector3 *))getAbsoluteAddress(targetLibName,0x10BED30);
-    A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0xDC9224),  (void*)UpdateController, (void**)&old_UpdateController);
-
-
-    A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0xAFF3A0),  (void*)LookControllerUpdate, (void**)&old_LookControllerUpdate);
+    get_isLocalPlayer =  (bool (*)(void *))getAbsoluteAddress(targetLibName,0x176F248);
+    SetX  = (void (*)(void *,float))getAbsoluteAddress(targetLibName,0x14A7B44);
+    SetY  = (void (*)(void *,float))getAbsoluteAddress(targetLibName,0x14A7B54);
+    get_transform = (void *(*)(void *))getAbsoluteAddress(targetLibName,0xB2E1CC);
+    get_position_Injected = (void (*)(void *, Vector3 *))getAbsoluteAddress(targetLibName,0x192F5B4);
+    A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0x1770C54),  (void*)UpdateController, (void**)&old_UpdateController);
 
 
-    String_CreateString = (monoString*(*)(void *,const char *))getAbsoluteAddress(targetLibName, 0x173B89C);
-    get_StringInstance  = (void (*))getAbsoluteAddress(targetLibName,0x173B89C);
+    A64HookFunction((void*)getAbsoluteAddress(targetLibName, 0x14A8C34),  (void*)LookControllerUpdate, (void**)&old_LookControllerUpdate);
+
+
+    String_CreateString = (monoString*(*)(void *,const char *))getAbsoluteAddress(targetLibName, 0xF04B78);
+    get_StringInstance  = (void (*))getAbsoluteAddress(targetLibName,0xF04B78);
 
 
     /*

@@ -26,7 +26,7 @@ void setTitleText(JNIEnv *env, jobject thiz, jobject obj) {
 void setHeadingText(JNIEnv *env, jobject thiz, jobject obj) {
     setText(env, obj, OBFUSCATE("<b><marquee><p style=\"font-size:30\">"
                                       "<p style=\"color:green;\">Modded by xxbatman9898</p> | "
-                                      "Modern Ops 7.05 Mod Menu</p>"
+                                      "Modern Ops 7.11 Mod Menu</p>"
                                       "</marquee></b>"));
 
     headingValid = true;
